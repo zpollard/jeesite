@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.financ_cust.dao.FinanceorganDao">
+    
+	<sql id="financeorganColumns">
+		a.id AS "id",
+		a.financeorgan_id AS "financeorganId",
+		a.financeorgan_code AS "financeorganCode",
+		a.financeorgan_name_cn AS "financeorganNameCn",
+		a.financeorgan_chargedept AS "financeorganChargedept",
+		a.financeorgan_business_code AS "financeorganBusinessCode",
+		a.business_startdate AS "businessStartdate",
+		a.business_enddate AS "businessEnddate",
+		a.financeorgan_kind AS "financeorganKind",
+		a.financeorgan_licence_code AS "financeorganLicenceCode",
+		a.financeorgan_address AS "financeorganAddress",
+		a.financeorgan_zipcode AS "financeorganZipcode",
+		a.financeorgan_tel AS "financeorganTel",
+		a.financeorgan_fax AS "financeorganFax",
+		a.financeorgan_url AS "financeorganUrl",
+		a.financeorgan_email AS "financeorganEmail",
+		a.financeorgan_deputy_name AS "financeorganDeputyName",
+		a.financeorgan_deputy_code AS "financeorganDeputyCode",
+		a.financeorgan_deputy_tel AS "financeorganDeputyTel",
+		a.financeorgan_deputy_mobile AS "financeorganDeputyMobile",
+		a.financeorgan_status AS "financeorganStatus",
+		a.createdate AS "createdatt",
+		a.consigner_name AS "consignerName",
+		a.consigner_code AS "consignerCode",
+		a.consigner_tel AS "consignerTel",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="financeorganJoins">
+	</sql>
+    
+	<select id="get" resultType="Financeorgan">
+		SELECT 
+			<include refid="financeorganColumns"/>
+		FROM financeorgan a
+		<include refid="financeorganJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Financeorgan">
+		SELECT 
+			<include refid="financeorganColumns"/>
+		FROM financeorgan a
+		<include refid="financeorganJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="financeorganNameCn != null and financeorganNameCn != ''">
+				AND a.financeorgan_name_cn LIKE 
+					<if test="dbName == 'oracle'">'%'||#{financeorganNameCn}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{financeorganNameCn}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{financeorganNameCn},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Financeorgan">
+		SELECT 
+			<include refid="financeorganColumns"/>
+		FROM financeorgan a
+		<include refid="financeorganJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO financeorgan(
+			id,
+			financeorgan_id,
+			financeorgan_code,
+			financeorgan_name_cn,
+			financeorgan_chargedept,
+			financeorgan_business_code,
+			business_startdate,
+			business_enddate,
+			financeorgan_kind,
+			financeorgan_licence_code,
+			financeorgan_address,
+			financeorgan_zipcode,
+			financeorgan_tel,
+			financeorgan_fax,
+			financeorgan_url,
+			financeorgan_email,
+			financeorgan_deputy_name,
+			financeorgan_deputy_code,
+			financeorgan_deputy_tel,
+			financeorgan_deputy_mobile,
+			financeorgan_status,
+			createdate,
+			consigner_name,
+			consigner_code,
+			consigner_tel,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{financeorganId},
+			#{financeorganCode},
+			#{financeorganNameCn},
+			#{financeorganChargedept},
+			#{financeorganBusinessCode},
+			#{businessStartdate},
+			#{businessEnddate},
+			#{financeorganKind},
+			#{financeorganLicenceCode},
+			#{financeorganAddress},
+			#{financeorganZipcode},
+			#{financeorganTel},
+			#{financeorganFax},
+			#{financeorganUrl},
+			#{financeorganEmail},
+			#{financeorganDeputyName},
+			#{financeorganDeputyCode},
+			#{financeorganDeputyTel},
+			#{financeorganDeputyMobile},
+			#{financeorganStatus},
+			#{createdatt},
+			#{consignerName},
+			#{consignerCode},
+			#{consignerTel},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE financeorgan SET 	
+			financeorgan_id = #{financeorganId},
+			financeorgan_code = #{financeorganCode},
+			financeorgan_name_cn = #{financeorganNameCn},
+			financeorgan_chargedept = #{financeorganChargedept},
+			financeorgan_business_code = #{financeorganBusinessCode},
+			business_startdate = #{businessStartdate},
+			business_enddate = #{businessEnddate},
+			financeorgan_kind = #{financeorganKind},
+			financeorgan_licence_code = #{financeorganLicenceCode},
+			financeorgan_address = #{financeorganAddress},
+			financeorgan_zipcode = #{financeorganZipcode},
+			financeorgan_tel = #{financeorganTel},
+			financeorgan_fax = #{financeorganFax},
+			financeorgan_url = #{financeorganUrl},
+			financeorgan_email = #{financeorganEmail},
+			financeorgan_deputy_name = #{financeorganDeputyName},
+			financeorgan_deputy_code = #{financeorganDeputyCode},
+			financeorgan_deputy_tel = #{financeorganDeputyTel},
+			financeorgan_deputy_mobile = #{financeorganDeputyMobile},
+			financeorgan_status = #{financeorganStatus},
+			createdate = #{createdatt},
+			consigner_name = #{consignerName},
+			consigner_code = #{consignerCode},
+			consigner_tel = #{consignerTel},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE financeorgan SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	<!-- 图表统计 -->
+   <select id="findtu" resultType="java.util.HashMap">
+   ${_parameter}
+  </select>  	
+</mapper>
